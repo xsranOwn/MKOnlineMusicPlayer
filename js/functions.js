@@ -35,7 +35,6 @@ $(function(){
     initProgress();     // 初始化音量条、进度条（进度条初始化要在 Audio 前，别问我为什么……）
     initAudio();    // 初始化 audio 标签，事件绑定
     
-    
     if(rem.isMobile) {  // 加了滚动条插件和没加滚动条插件所操作的对象是不一样的
         rem.sheetList = $("#sheet");
         rem.mainList = $("#main-list");
@@ -127,7 +126,7 @@ $(function(){
                 listClick(num);     // 调用列表点击处理函数
             break;
             case "download":    // 下载
-                ajaxUrl(musicList[rem.dislist].item[num], download);
+                ajaxUrl(musicList[rem.dislist].item[num], downloadUrl);
             break;
             case "share":   // 分享
                 // ajax 请求数据
@@ -281,16 +280,21 @@ $(function(){
 function musicInfo(list, index) {
     var music = musicList[list].item[index];
     var tempStr = '<span class="info-title">歌名：</span>' + music.name + 
-    '<br><span class="info-title">歌手：</span>' + music.artist + 
-    '<br><span class="info-title">专辑：</span>' + music.album;
+    '<br /><span class="info-title">歌手：</span>' + music.artist + 
+    '<br /><span class="info-title">专辑：</span>' + music.album;
     
     if(list == rem.playlist && index == rem.playid) {   // 当前正在播放这首歌，那么还可以顺便获取一下时长。。
-        tempStr += '<br><span class="info-title">时长：</span>' + formatTime(rem.audio[0].duration);
+        tempStr += '<br /><span class="info-title">时长：</span>' + formatTime(rem.audio[0].duration);
     }
     
-    tempStr += '<br><span class="info-title">操作：</span>' + 
-    '<span class="info-btn" onclick="thisDownload(this)" data-list="' + list + '" data-index="' + index + '">下载</span>' + 
-    '<span style="margin-left: 10px" class="info-btn" onclick="thisShare(this)" data-list="' + list + '" data-index="' + index + '">外链</span>';
+    tempStr += '<br /><span class="info-title">操作：</span>' + 
+    '<span class="info-btn" onclick="thisDownload1(this)" data-list="' + list + '" data-index="' + index + '">blob下载</span>&nbsp;' + 
+    '<span class="info-btn" onclick="thisDownload(this)" data-list="' + list + '" data-index="' + index + '">直链下载</span>&nbsp;' + 
+    '<span class="info-btn" onclick="thisDownloadLrc(this)" data-list="' + list + '" data-index="' + index + '">歌词下载</span>&nbsp;' + 
+    //'<span style="margin-left: 10px" class="info-btn" onclick="thisShare(this)" data-list="' + list + '" data-index="' + index + '">外链</span>';
+    '<span class="info-btn" onclick="thisShare(this)" data-list="' + list + '" data-index="' + index + '">外链</span>';
+
+    // tempStr +='<br />若使用下载1失败，请尝试使用下载2'
     
     layer.open({
         type: 0,
@@ -325,10 +329,16 @@ function searchBox() {
     '    <div class="radio-group" id="music-source">' + 
     '       <label><input type="radio" name="source" value="netease" checked=""> 网易云</label>' + 
     '       <label><input type="radio" name="source" value="tencent"> QQ</label>' + 
-    '       <label><input type="radio" name="source" value="xiami"> 虾米</label>' + 
-    '       <label><input type="radio" name="source" value="kugou"> 酷狗</label>' + 
-    '       <label><input type="radio" name="source" value="baidu"> 百度</label>' + 
+    // '       <label><input type="radio" name="source" value="xiami"> 虾米</label>' + 
+    // '       <label><input type="radio" name="source" value="kugou"> 酷狗</label>' + 
+    // '       <label><input type="radio" name="source" value="baidu"> 百度</label>' + 
+    '       仅支持搜索以上平台'+
     '   </div>' + 
+    
+    //'   <div class="radio-group" id="music-source">' + 
+    //'       <label><input type="radio" name="source" value="netease" checked="" style="display:none"></label>' +
+    //'       只可以搜索网易云音乐的内容&nbsp&nbsp&nbsp&nbsp&nbsp' +
+    //'   </div>' +
     '</div></form>';
     layer.open({
         type: 1,
@@ -369,9 +379,55 @@ function thisDownload(obj) {
     ajaxUrl(musicList[$(obj).data("list")].item[$(obj).data("index")], download);
 }
 
+function thisDownload1(obj) {
+	
+    //ajaxUrl(musicList[$(obj).data("list")].item[$(obj).data("index")], download);
+	ajaxUrl(musicList[$(obj).data("list")].item[$(obj).data("index")], downloadUrl);
+}
 // 分享正在播放的这首歌
 function thisShare(obj) {
     ajaxUrl(musicList[$(obj).data("list")].item[$(obj).data("index")], ajaxShare);
+}
+// 下载歌词
+function thisDownloadLrc(obj) {
+    var music = musicList[$(obj).data("list")].item[$(obj).data("index")];
+    layer.closeAll();
+    $.ajax({
+        type: mkPlayer.method,
+        url: mkPlayer.api,
+        data: "types=lyric&id=" + music.lyric_id + "&source=" + music.source,
+        dataType: mkPlayer.dataType,
+        success: function(jsonData){
+            // 调试信息输出
+            if (mkPlayer.debug) {
+                console.debug("歌词获取成功");
+            }
+            
+            var lyric = jsonData.lyric;
+            if (mkPlayer.debug) {
+                console.debug("歌词获取成功");
+            }
+            if (lyric) {
+                //var artist = music.artist ? ' - ' + music.artist : '';
+                //var filename = (music.name + artist + '.lrc').replace('/', '&');
+                var filename = (music.name + '.lrc').replace('/', '&');
+                var element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(lyric));
+                element.setAttribute('download', filename);
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            } else {
+                layer.msg('歌词获取失败');
+            }
+        },   //success
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            layer.msg('歌词读取失败 - ' + XMLHttpRequest.status);
+            console.error(XMLHttpRequest + textStatus + errorThrown);
+            callback('', music.lyric_id);    // 回调函数
+        }   // error   
+    });//ajax
 }
 
 // 下载歌曲
@@ -409,6 +465,7 @@ function openDownloadDialog(url, saveName)
     }
     aLink.dispatchEvent(event);
 }
+
 
 // 获取外链的ajax回调函数
 // 参数：包含音乐信息的数组

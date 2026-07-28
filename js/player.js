@@ -7,19 +7,18 @@
 // 播放器功能配置
 var mkPlayer = {
     api: "api.php", // api地址
-    loadcount: 20,  // 搜索结果一次加载多少条
+    loadcount: 10,  // 搜索结果一次加载多少条
     method: "POST",     // 数据传输方式(POST/GET)
     defaultlist: 3,    // 默认要显示的播放列表编号
     autoplay: false,    // 是否自动播放(true/false) *此选项在移动端可能无效
-    coverbg: true,      // 是否开启封面背景(true/false) *开启后会有些卡
-    mcoverbg: true,     // 是否开启[移动端]封面背景(true/false)
-    dotshine: true,    // 是否开启播放进度条的小点闪动效果[不支持IE](true/false) *开启后会有些卡
+    coverbg: false,      // 是否开启封面背景(true/false) *开启后会有些卡
+    mcoverbg: false,     // 是否开启[移动端]封面背景(true/false)
+    dotshine: false,    // 是否开启播放进度条的小点闪动效果[不支持IE](true/false) *开启后会有些卡
     mdotshine: false,   // 是否开启[移动端]播放进度条的小点闪动效果[不支持IE](true/false)
-    volume: 0.6,        // 默认音量值(0~1之间)
+    volume: 1,        // 默认音量值(0~1之间)
     version: "v2.41",    // 播放器当前版本号(仅供调试)
     debug: false   // 是否开启调试模式(true/false)
 };
-
 
 
 /*******************************************************
@@ -27,6 +26,9 @@ var mkPlayer = {
  * 
  * 哈哈，吓唬你的！想改就改呗！不过建议修改之前先【备份】,要不然改坏了弄不好了。
  ******************************************************/
+// 我的要求并不高，保留这一句版权信息可好？
+// 保留了，你不会损失什么；而保留版权，是对作者最大的尊重。
+ console.info('欢迎使用 MKOnlinePlayer!\n当前版本：'+mkPlayer.version+' \n作者：mengkun(https://mkblog.cn)\n歌曲来源于各大音乐平台\nGithub：https://github.com/mengkunsoft/MKOnlineMusicPlayer');
 
 // 存储全局变量
 var rem = [];
@@ -45,6 +47,7 @@ function audioErr() {
         nextMusic();    // 切换下一首歌
     } 
 }
+
 
 // 点击暂停按钮的事件
 function pause() {
@@ -105,7 +108,8 @@ function audioPlay() {
     }
     
     var music = musicList[rem.playlist].item[rem.playid];   // 获取当前播放的歌曲信息
-    var msg = " 正在播放: " + music.name + " - " + music.artist;  // 改变浏览器标题
+    // var msg = " 正在播放: " + music.name + " - " + music.artist;  // 改变浏览器标题
+    var msg = music.name + " - " + music.artist;
     
     // 清除定时器
     if (rem.titflash !== undefined ) 
@@ -113,7 +117,8 @@ function audioPlay() {
         clearInterval(rem.titflash);
     }
     // 标题滚动
-    titleFlash(msg);
+    // titleFlash(msg);
+    // document.title = msg;
 }
 // 标题滚动
 function titleFlash(msg) {
@@ -285,7 +290,6 @@ function initAudio() {
     rem.audio[0].addEventListener('error', audioErr);   // 播放器错误处理
 }
 
-
 // 播放音乐
 // 参数：要播放的音乐数组
 function play(music) {
@@ -304,7 +308,15 @@ function play(music) {
         'pic: "' + music.pic + '",\n' +
         'url: "' + music.url + '"');
     }
-    
+    // MediaSession
+    if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: music.name,
+            artist: music.artist,
+            album: music.album,
+            artwork: [{src: music.pic}],
+          });
+    }
     // 遇到错误播放下一首歌
     if(music.url == "err") {
         audioErr(); // 调用错误处理函数
@@ -335,11 +347,6 @@ function play(music) {
     ajaxLyric(music, lyricCallback);     // ajax加载歌词
     music_bar.lock(false);  // 取消进度条锁定
 }
-
-
-// 我的要求并不高，保留这一句版权信息可好？
-// 保留了，你不会损失什么；而保留版权，是对作者最大的尊重。
-console.info('欢迎使用 MKOnlinePlayer!\n当前版本：'+mkPlayer.version+' \n作者：mengkun(https://mkblog.cn)\n歌曲来源于各大音乐平台\nGithub：https://github.com/mengkunsoft/MKOnlineMusicPlayer');
 
 // 音乐进度条拖动回调函数
 function mBcallback(newVal) {
@@ -460,7 +467,16 @@ mkpgb.prototype = {
         }
         return true;
     }
-};  
+}; 
+
+// MetaData接入
+if ("mediaSession" in navigator) {
+    navigator.mediaSession.setActionHandler("play", pause);
+    navigator.mediaSession.setActionHandler("pause", pause);
+    navigator.mediaSession.setActionHandler("previoustrack", prevMusic);
+    navigator.mediaSession.setActionHandler("nexttrack", nextMusic);
+} 
+
 
 // 快捷键切歌，代码来自 @茗血(https://www.52benxi.cn/)
 document.onkeydown = function showkey(e) {

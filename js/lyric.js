@@ -14,15 +14,15 @@ function lyricTip(str) {
 
 // 歌曲加载完后的回调函数
 // 参数：歌词源文件
-function lyricCallback(str, id) {
+function lyricCallback(str, id, tstr) {
     if(id !== musicList[rem.playlist].item[rem.playid].id) return;  // 返回的歌词不是当前这首歌的，跳过
     
-    rem.lyric = parseLyric(str);    // 解析获取到的歌词
-    
-    if(rem.lyric === '') {
-        lyricTip('没有歌词');
+    if (str === "") {
+        lyricTip('暂时没有歌词');
         return false;
     }
+    rem.lyric = parseLyric(str); // 解析获取到的歌词
+    rem.tlyric = parseLyric(tstr);
     
     lyricArea.html('');     // 清空歌词区域的内容
     lyricArea.scrollTop(0);    // 滚动到顶部
@@ -34,7 +34,14 @@ function lyricCallback(str, id) {
     for(var k in rem.lyric){
         var txt = rem.lyric[k];
         if(!txt) txt = "&nbsp;";
-        var li = $("<li data-no='"+i+"' class='lrc-item'>"+txt+"</li>");
+        
+        if (!rem.tlyric || rem.tlyric === '' || !(k in rem.tlyric)) {
+		    var li = $("<li data-no='" + i + "' class='lrc-item'><span class='shell'>" + txt + "</span></li>");
+        } else { 
+            var txtTranslate = rem.tlyric[k];
+            if(!txtTranslate || txtTranslate === '') txtTranslate = "&nbsp;";
+            var li = $("<li data-no='" + i + "' class='lrc-item'><span class='shell'>" + txt + "</span><br /><span class='trans-lyric-item'>" + txtTranslate + "</span></li>");
+        }
         lyricArea.append(li);
         i++;
     }
@@ -47,11 +54,10 @@ function refreshLyric(time) {
     
     time = parseInt(time);  // 时间取整
     var i = 0;
-    for(var k in rem.lyric){
-        if(k >= time) break;
-        i = k;      // 记录上一句的
-    }
-    
+	for(var k in rem.lyric){
+		if(k >= time) break;
+		i = k;      // 记录上一句的
+	}
     scrollLyric(i);
 }
 
@@ -71,12 +77,21 @@ function scrollLyric(time) {
         if(k == time) break;
         i ++;
     }
+    var j = 0; // 获取当前翻译歌词是在第几行
+    if (rem.tlyric){
+        for(var p in rem.tlyric){
+            if(p >= time) break;
+            j ++;
+        }
+    }
+    
     rem.lastLyric = time;  // 记录方便下次使用
     $(".lplaying").removeClass("lplaying");     // 移除其余句子的正在播放样式
     $(".lrc-item[data-no='" + i + "']").addClass("lplaying");    // 加上正在播放样式
-    
-    var scroll = (lyricArea.children().height() * i) - ($(".lyric").height() / 2); 
-    lyricArea.stop().animate({scrollTop: scroll}, 1000);  // 平滑滚动到当前歌词位置(更改这个数值可以改变歌词滚动速度，单位：毫秒)
+    var scroll = (lyricArea.children().height() * (i + j)) - ($(".lyric").height() / 2); 
+    // var scroll = (28 * (i + j)) - ($(".lyric").height() / 2); 
+    // console.log("scroll\t"+scroll+"\nlyric\t"+i+"\ntlyric\t"+j);
+    lyricArea.stop().animate({scrollTop: scroll}, 500);  // 平滑滚动到当前歌词位置(更改这个数值可以改变歌词滚动速度，单位：毫秒)
     
 }
 

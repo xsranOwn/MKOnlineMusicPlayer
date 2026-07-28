@@ -5,6 +5,7 @@
  * 时间：2018-3-11
  *************************************************/
 
+
 // ajax加载搜索结果
 function ajaxSearch() {
     if(rem.wd === ""){
@@ -92,6 +93,43 @@ function ajaxSearch() {
     });//ajax
 }
 
+//url:文件地址 filename:想要修改为的名称
+function downloadUrl(in0) {
+	var url = in0.url;
+	var filename = in0.name;
+	getBlob(url, function (blob) {saveAs(blob, filename);});
+}
+
+function getBlob(url, cb) {
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', url, true);
+	xhr.responseType = 'blob';
+	xhr.onload = function () {
+		if (xhr.status === 200) {
+			cb(xhr.response);
+		}
+	}
+	xhr.send();
+}
+
+
+function saveAs(blob, filename) {
+	if (window.navigator.msSaveOrOpenBlob) {
+		navigator.msSaveBlob(blob, filename);
+	} else {
+		var link = document.createElement('a');
+		var body = document.querySelector('body');
+		link.href = window.URL.createObjectURL(blob);
+		link.download = filename;
+// fix Firefox
+		link.style.display = 'none';
+		body.appendChild(link);
+		link.click();
+		body.removeChild(link);
+		window.URL.revokeObjectURL(link.href);
+	};
+}
+
 // 完善获取音乐信息
 // 音乐所在列表ID、音乐对应ID、回调函数
 function ajaxUrl(music, callback)
@@ -108,7 +146,7 @@ function ajaxUrl(music, callback)
         callback(music);
         return true;
     }
-    
+
     $.ajax({ 
         type: mkPlayer.method, 
         url: mkPlayer.api,
@@ -313,7 +351,7 @@ function ajaxLyric(music, callback) {
             }
             
             if (jsonData.lyric) {
-                callback(jsonData.lyric, music.lyric_id);    // 回调函数
+                callback(jsonData.lyric, music.lyric_id, jsonData.tlyric);    // 回调函数
             } else {
                 callback('', music.lyric_id);    // 回调函数
             }
