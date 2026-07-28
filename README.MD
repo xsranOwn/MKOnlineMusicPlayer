@@ -16,10 +16,6 @@ MKOnlineMusicPlayer 是一款开源的基于 `Meting` 的在线音乐播放器�
 
 ### 相关链接
 -----
-**在线演示** [http://lab.mkblog.cn/music/](http://lab.mkblog.cn/music/)
-
-**详细介绍** [http://mkblog.cn/1060/](http://mkblog.cn/1060/)
-
 **GitHub** [https://github.com/mengkunsoft/MKOnlineMusicPlayer](https://github.com/mengkunsoft/MKOnlineMusicPlayer)
 
 ### 常见问题
@@ -30,6 +26,9 @@ MKOnlineMusicPlayer 是一款开源的基于 `Meting` 的在线音乐播放器�
 
 ### 更新日志
 -----
+#### v2.5 `2026/7/28`
+- 增加歌词翻译
+
 #### v2.41 `2018/3/13`
 - 修复 IE 下播放键错位的 BUG
 - 修改默认背景为黑色
@@ -134,7 +133,6 @@ MKOnlineMusicPlayer 是一款开源的基于 `Meting` 的在线音乐播放器�
 - 完成显示歌曲封面、歌词功能
 
 
-### 开发文档[待完善]
 -----
 #### 播放列表DIY教程
 本播放器支持后台自定义播放列表。打开 `js/musicList.js`，按照里面的说明对应修改即可。
@@ -161,9 +159,6 @@ MKOnlineMusicPlayer 是一款开源的基于 `Meting` 的在线音乐播放器�
 | rem.isMobile | 是否是手机浏览 |
 
 ### 致谢
------
-#### 特别感谢 `@metowolf`、`网易云音乐`、`QQ音乐`、`虾米`、`酷狗`、`百度音乐`
-
 #### 采用的开源模块
 - **Jquery**：js主流开发框架 [http://jquery.com/](http://jquery.com/)
 - **Meting**：一个高效的多平台音乐 API 框架 [https://github.com/metowolf/Meting](https://github.com/metowolf/Meting)
@@ -173,18 +168,3 @@ MKOnlineMusicPlayer 是一款开源的基于 `Meting` 的在线音乐播放器�
 - **Let's Kill IE6**：消灭IE [http://overtrue.me](http://overtrue.me)
 
 ##### 在开发过程中，还参照了很多开源 html 播放器的相关代码，在此一并向他们表示感谢！
-
-### 耻辱柱
------
-恭喜下列个人或单位永久入驻耻辱柱！
-
-#### 素材火 [http://www.sucaihuo.com/]
-原因：以积分的形式变相售卖本作品(http://www.sucaihuo.com/php/3378.html ) 截图：https://t.cn/RFsgAAw
-
-#### 绿岛资源站 [http://www.ldzy.cc/]
-原因：未经允许，发布到淘宝售卖(https://item.taobao.com/item.htm?id=560064138441 ) 截图：https://t.cn/RlNRmi5
-
-#### 68喜论坛 [http://www.68xi.com/]
-原因：未经允许，删改版权信息(http://music.68xi.com/ )，并发布到淘宝售卖(https://item.taobao.com/item.htm?id=547226809330 )
-
-`奉劝某些“人”保留住做人的最基本底线，遵守开源协议，并引以为戒`
