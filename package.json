@@ -1,0 +1,21 @@
+{
+  "name": "mkonlineplayer",
+  "version": "1.0.0",
+  "description": "MKOnlinePlayer v2.4 - Node.js API server (Meting)",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node -e \"process.env.MK_DEBUG='true'; import('./app.js')\""
+  },
+  "dependencies": {
+    "@meting/core": "^1.6.1"
+  },
+  "keywords": [
+    "music",
+    "api",
+    "netease",
+    "meting"
+  ],
+  "license": "MIT"
+}
