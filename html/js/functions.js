@@ -110,9 +110,9 @@ $(function(){
             target.html() + 
             '</span>' +
             '<div class="list-menu" data-no="' + num + '">' +
-                '<span class="list-icon icon-play" data-function="play" title="点击播放这首歌"></span>' +
-                '<span class="list-icon icon-download" data-function="download" title="点击下载这首歌"></span>' +
-                '<span class="list-icon icon-share" data-function="share" title="点击分享这首歌"></span>' +
+                '<span class="list-icon icon-play" data-function="play" title="播放"></span>' +
+                '<span class="list-icon icon-download" data-function="download" title="下载"></span>' +
+                '<span class="list-icon icon-share" data-function="share" title="分享"></span>' +
             '</div>';
             target.html(html);
             $(this).data("loadmenu", true);
@@ -293,10 +293,7 @@ function musicInfo(list, index) {
     '<span class="info-btn" onclick="thisDownload1(this)" data-list="' + list + '" data-index="' + index + '">blob下载</span>&nbsp;' + 
     '<span class="info-btn" onclick="thisDownload(this)" data-list="' + list + '" data-index="' + index + '">直链下载</span>&nbsp;' + 
     '<span class="info-btn" onclick="thisDownloadLrc(this)" data-list="' + list + '" data-index="' + index + '">歌词下载</span>&nbsp;' + 
-    //'<span style="margin-left: 10px" class="info-btn" onclick="thisShare(this)" data-list="' + list + '" data-index="' + index + '">外链</span>';
     '<span class="info-btn" onclick="thisShare(this)" data-list="' + list + '" data-index="' + index + '">外链</span>';
-
-    // tempStr +='<br />若使用下载1失败，请尝试使用下载2'
     
     layer.open({
         type: 0,
@@ -334,13 +331,7 @@ function searchBox() {
     '       <label><input type="radio" name="source" value="xiami"> 虾米</label>' + 
     '       <label><input type="radio" name="source" value="kugou"> 酷狗</label>' + 
     '       <label><input type="radio" name="source" value="baidu"> 百度</label>' + 
-    '       仅支持搜索以上平台'+
     '   </div>' + 
-    
-    //'   <div class="radio-group" id="music-source">' + 
-    //'       <label><input type="radio" name="source" value="netease" checked="" style="display:none"></label>' +
-    //'       只可以搜索网易云音乐的内容&nbsp&nbsp&nbsp&nbsp&nbsp' +
-    //'   </div>' +
     '</div></form>';
     layer.open({
         type: 1,
