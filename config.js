@@ -1,6 +1,9 @@
 /**
- * MKOnlinePlayer v2.4 — Node.js API 配置
+ * MKOnlinePlayer v1.0.0 — Node.js API 配置
  * 直接修改下方默认值即可生效，环境变量优先级更高
+ *
+ * 修改：@xsran2008
+ * 时间：2025-7-28
  */
 
 const config = {

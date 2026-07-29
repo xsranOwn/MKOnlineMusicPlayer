@@ -1,9 +1,12 @@
 /**
- * MKOnlinePlayer v2.4 — Node.js 全栈服务器
+ * MKOnlinePlayer v1.0.0 — Node.js 全栈服务器
  * 同时提供 API 和静态文件服务，完全替代 nginx
  *
  * 启动：node api.js
  * 默认端口：9500（可通过 MK_PORT 环境变量修改）
+ *
+ * 修改：@xsran2008
+ * 时间：2025-7-28
  */
 
 import http from 'http';

@@ -1,5 +1,5 @@
 /**************************************************
- * MKOnlinePlayer v2.31
+ * MKOnlinePlayer v1.0.0
  * 歌词解析及滚动模块
  * 编写：mengkun(http://mkblog.cn)
  * 时间：2017-9-13

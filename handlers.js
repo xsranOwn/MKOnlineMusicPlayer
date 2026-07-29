@@ -1,6 +1,9 @@
 /**
- * MKOnlinePlayer v2.4 — Node.js API 路由处理器
+ * MKOnlinePlayer v1.0.0 — Node.js API 路由处理器
  * 对应 api.php 中 switch($types) 的各个分支
+ *
+ * 修改：@xsran2008
+ * 时间：2025-7-28
  */
 
 import Meting from '@meting/core';

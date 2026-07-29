@@ -1,6 +1,9 @@
 /**
- * MKOnlinePlayer v2.4 — Node.js API 工具模块
+ * MKOnlinePlayer v1.0.0 — Node.js API 工具模块
  * 对应 api.php 中的工具函数
+ *
+ * 修改：@xsran2008
+ * 时间：2025-7-28
  */
 
 import fs from 'fs';

@@ -1,5 +1,5 @@
 /**************************************************
- * MKOnlinePlayer v2.4
+ * MKOnlinePlayer v1.0.0
  * 封装函数及UI交互模块
  * 编写：mengkun(https://mkblog.cn)
  * 时间：2018-3-11
